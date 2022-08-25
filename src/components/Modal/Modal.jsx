@@ -3,7 +3,6 @@ import s from '../Modal/modal.module.css';
 
 class Modal extends Component {
   componentDidMount() {
-    console.log('ggg');
     document.addEventListener('keydown', this.closeModal);
   }
 
