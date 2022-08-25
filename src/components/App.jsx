@@ -1,14 +1,12 @@
 import { Component } from 'react';
-import axios from 'axios';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
 import Modal from './Modal/Modal';
 import s from '../components/app.module.css';
+import { fetchApi } from 'utils/FetchApi';
 
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '28740529-a5c8b6a6d9e9b336b906aaf7a';
 export class App extends Component {
   state = {
     data: [],
@@ -31,16 +29,7 @@ export class App extends Component {
       this.setState({ loading: true });
       const {
         data: { hits },
-      } = await axios.get(`${BASE_URL}`, {
-        params: {
-          q: this.state.query,
-          page: this.state.page,
-          key: API_KEY,
-          image_type: 'photo',
-          orientation: 'horizontal',
-          per_page: 12,
-        },
-      });
+      } = await fetchApi(this.state.page, this.state.query);
       this.setState({ data: [...this.state.data, ...hits] });
     } catch (err) {
       console.log(err);
@@ -50,7 +39,7 @@ export class App extends Component {
   };
 
   searchImg = query => {
-    this.setState({ query: query });
+    this.setState({ query: query, page: 1, data: [] });
   };
 
   loadMore = () => {
